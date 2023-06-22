@@ -136,13 +136,14 @@ class StridedSequenceDataset(Dataset):
         self.step_size = step_size
         self.random_shift = random_shift
         self.transform = transform
-        #window size is the 
         self.interval = kwargs.get('interval', window_size)
 
         self.data_path = [osp.join(root_dir, data) for data in data_list]
         self.index_map = []
         self.ts, self.orientations, self.gt_pos = [], [], []
         self.features, self.targets, aux = [], [], []
+        
+        print('Parameters in dataset \nfeat_sigma: {}, targ_sigma: {}, random_shift: {}, transform: {}'.format(feat_sigma, targ_sigma, random_shift, transform))
   
         for i in range(len(data_list)):
             seq = seq_type(osp.join(root_dir, data_list[i]), interval = self.interval, **kwargs)
@@ -183,7 +184,7 @@ class StridedSequenceDataset(Dataset):
 
     
 class SequenceToSequenceDataset(Dataset):
-    def __init__(self, seq_type, root_dir, data_list, cache_path=None, step_size=10, window_size=200, random_shift=0, transform=None, **kwargs):
+    def __init__(self, seq_type, root_dir, data_list, cache_path=None, step_size=10, window_size=200, random_shift=0, transform=None, feature_sigma = -1, target_sigma  = -1, **kwargs):
         super(SequenceToSequenceDataset, self).__init__()
         self.feature_dim = seq_type.feature_dim
         self.target_dim = seq_type.target_dim
@@ -205,10 +206,10 @@ class SequenceToSequenceDataset(Dataset):
             self.targets.append(seq.get_target())
             aux.append(seq.get_aux())
         
-        #CAN ADD SMOOTHING HERE
-        # Optionally smooth the sequence
-        feat_sigma = kwargs.get('feature_sigma,', -1)
-        targ_sigma = kwargs.get('target_sigma,', -1)
+        feat_sigma = feature_sigma
+        targ_sigma = target_sigma
+        print('Parameters in dataset \nfeat_sigma: {}, targ_sigma: {}, random_shift: {}, transform: {}'.format(feat_sigma, targ_sigma, random_shift, transform))
+        
         if feat_sigma > 0:
             self.features = [gaussian_filter1d(feat, sigma=feat_sigma, axis=0) for feat in self.features]
         if targ_sigma > 0:
