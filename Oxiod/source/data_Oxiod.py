@@ -143,7 +143,7 @@ class StridedSequenceDataset(Dataset):
         self.ts, self.orientations, self.gt_pos = [], [], []
         self.features, self.targets, aux = [], [], []
         
-        print('Parameters in dataset \nfeat_sigma: {}, targ_sigma: {}, random_shift: {}, transform: {}'.format(feat_sigma, targ_sigma, random_shift, transform))
+        #print('Parameters in dataset \nrandom_shift: {}, transform: {}'.format(random_shift, transform))
   
         for i in range(len(data_list)):
             seq = seq_type(osp.join(root_dir, data_list[i]), interval = self.interval, **kwargs)
@@ -208,7 +208,7 @@ class SequenceToSequenceDataset(Dataset):
         
         feat_sigma = feature_sigma
         targ_sigma = target_sigma
-        print('Parameters in dataset \nfeat_sigma: {}, targ_sigma: {}, random_shift: {}, transform: {}'.format(feat_sigma, targ_sigma, random_shift, transform))
+        #print('Parameters in dataset \nfeat_sigma: {}, targ_sigma: {}, random_shift: {}, transform: {}'.format(feat_sigma, targ_sigma, random_shift, transform))
         
         if feat_sigma > 0:
             self.features = [gaussian_filter1d(feat, sigma=feat_sigma, axis=0) for feat in self.features]
