@@ -5,6 +5,8 @@ import pandas as pd
 import numpy as np
 import quaternion
 import random
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 
 from data_utils import CompiledSequence
 from scipy.ndimage import gaussian_filter1d
@@ -147,10 +149,19 @@ class StridedSequenceDataset(Dataset):
   
         for i in range(len(data_list)):
             seq = seq_type(osp.join(root_dir, data_list[i]), interval = self.interval, **kwargs)
-            self.features.append(seq.get_feature())
-            self.targets.append(seq.get_target())
-            aux.append(seq.get_aux())
-        
+            
+            # The scaler is used in test_sequence function when the only data in the dataset is the single sequence
+            self.feat_scaler = StandardScaler()
+            self.targ_scaler = StandardScaler()
+            
+            
+            norm_features = self.feat_scaler.fit_transform(seq.get_feature())
+            norm_targets = self.targ_scaler.fit_transform(seq.get_target())
+            
+            self.features.append(norm_features)
+            self.targets.append(norm_targets)
+
+            aux.append(seq.get_aux())        
         
         for i in range(len(data_list)):            
             self.ts.append(aux[i][:, 0])
