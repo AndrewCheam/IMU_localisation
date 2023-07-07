@@ -14,6 +14,11 @@ sys.path.append(osp.join(osp.dirname(osp.abspath(__file__)), '..'))
 from math_util import *
 from metric import compute_absolute_trajectory_error, compute_relative_trajectory_error
 
+# TO RUN ON TERMINAL IN AISTACK
+# python baseline_pdr.py --list /home/jovyan/imu_localisation/ronin/lists/list_test_unseen.txt --root_dir /home/jovyan/localisation_datasets/Ronin_datasets/unseen_subjects_test_set --out_dir /home/jovyan/imu_localisation/ronin/pdr_output
+
+# python ronin_resnet.py --mode test --test_list /home/jovyan/imu_localisation/ronin/lists/list_test_unseen.txt --root_dir /home/jovyan/localisation_datasets/Ronin_datasets/unseen_subjects_test_set --out_dir /home/jovyan/imu_localisation/ronin/output --model_path /home/jovyan//imu_localisation/ronin/PreTrained_Models/ronin_resnet/ronin_resnet/checkpoint_gsn_latest.pt
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--list', type=str, default=None)
@@ -112,9 +117,10 @@ if __name__ == '__main__':
 
         plt.close('all')
         plt.figure(data, figsize=(8, 6))
-        plt.plot(pos_gt[:, 0], pos_gt[:, 1])
+        
         plt.plot(pos_pred[:, 0], pos_pred[:, 1])
-        plt.legend(['Ground truth', 'Estimated'])
+        plt.plot(pos_gt[:, 0], pos_gt[:, 1])
+        plt.legend(['Estimated', 'Ground truth'])
         plt.axis('equal')
         plt.tight_layout()
 
@@ -130,3 +136,4 @@ if __name__ == '__main__':
             f.write('seq,ate,rte\n')
             for i in range(len(data_list)):
                 f.write('{},{:.6f},{:.6f}\n'.format(data_list[i], ate_all[i], rte_all[i]))
+        

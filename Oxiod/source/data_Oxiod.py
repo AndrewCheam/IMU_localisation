@@ -38,11 +38,15 @@ class OxfordGlobSpeedSequence(CompiledSequence):
         data = self.clean_Data(data)
 
         column_names = ['rotation_rate_x(radians/s)', 'rotation_rate_y(radians/s)','rotation_rate_z(radians/s)', 'user_acc_x(G)', 'user_acc_y(G)',
-                        'user_acc_z(G)', 'translation.x', 'translation.y', 'translation.z', 'rotation.x', 'rotation.y', 'rotation.z', 'rotation.w']
+                        'user_acc_z(G)', 'gravity_x(G)', 'gravity_y(G)', 'gravity_z(G)', 'translation.x', 'translation.y', 'translation.z', 'rotation.x', 'rotation.y', 'rotation.z', 'rotation.w']
 
         data.columns = column_names
         # Print the modified DataFrame
         #display(data)
+        
+        #exclude gravity data
+        data = data.drop(columns = ['gravity_x(G)', 'gravity_y(G)', 'gravity_z(G)'])
+        
         
         
         gyro = data[['rotation_rate_x(radians/s)', 'rotation_rate_y(radians/s)', 'rotation_rate_z(radians/s)']].values
@@ -71,7 +75,7 @@ class OxfordGlobSpeedSequence(CompiledSequence):
 
         
         # Right now, ori_q is using the ground truth rotation quaternion
-        ori = data[['rotation.x', 'rotation.y', 'rotation.z', 'rotation.w']]
+        ori = data[['rotation.w', 'rotation.x', 'rotation.y', 'rotation.z']]
         ori_q = quaternion.from_float_array(ori)
         
         #convert to quaternion in order to do quaternion operation, through padding of zeroes. The new quaternion will then have the pads removed 
@@ -153,13 +157,12 @@ class StridedSequenceDataset(Dataset):
             # The scaler is used in test_sequence function when the only data in the dataset is the single sequence
             self.feat_scaler = StandardScaler()
             self.targ_scaler = StandardScaler()
-            
-            
-            norm_features = self.feat_scaler.fit_transform(seq.get_feature())
-            norm_targets = self.targ_scaler.fit_transform(seq.get_target())
-            
-            self.features.append(norm_features)
-            self.targets.append(norm_targets)
+
+            # norm_features = self.feat_scaler.fit_transform(seq.get_feature(), axis = 1)
+            # norm_targets = self.targ_scaler.fit_transform(seq.get_target(), axis = 1)
+
+            self.features.append(seq.get_feature())
+            self.targets.append(seq.get_target())
 
             aux.append(seq.get_aux())        
         
