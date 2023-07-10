@@ -39,13 +39,17 @@ class OxfordGlobSpeedSequence(CompiledSequence):
 
         column_names = ['rotation_rate_x(radians/s)', 'rotation_rate_y(radians/s)','rotation_rate_z(radians/s)', 'user_acc_x(G)', 'user_acc_y(G)',
                         'user_acc_z(G)', 'gravity_x(G)', 'gravity_y(G)', 'gravity_z(G)', 'translation.x', 'translation.y', 'translation.z', 'rotation.x', 'rotation.y', 'rotation.z', 'rotation.w']
+        
+        
+        column_names = ['rotation_rate_x(radians/s)', 'rotation_rate_y(radians/s)','rotation_rate_z(radians/s)', 'user_acc_x(G)', 'user_acc_y(G)',
+                        'user_acc_z(G)', 'translation.x', 'translation.y', 'translation.z', 'rotation.x', 'rotation.y', 'rotation.z', 'rotation.w']
 
         data.columns = column_names
         # Print the modified DataFrame
         #display(data)
         
         #exclude gravity data
-        data = data.drop(columns = ['gravity_x(G)', 'gravity_y(G)', 'gravity_z(G)'])
+        #data = data.drop(columns = ['gravity_x(G)', 'gravity_y(G)', 'gravity_z(G)'])
         
         
         
