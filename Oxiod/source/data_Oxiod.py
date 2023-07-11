@@ -75,10 +75,7 @@ class OxfordGlobSpeedSequence(CompiledSequence):
             avg_slice = (np.average(glob_v_slice) + np.average(glob_v[idx - 5:idx, index[1]])) / 2
             glob_v[idx, index[1]] = avg_slice
         
-        
 
-        
-        # Right now, ori_q is using the ground truth rotation quaternion
         ori = data[['rotation.w', 'rotation.x', 'rotation.y', 'rotation.z']]
         ori_q = quaternion.from_float_array(ori)
         
