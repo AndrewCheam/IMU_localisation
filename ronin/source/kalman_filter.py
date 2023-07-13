@@ -47,7 +47,7 @@ class ExtendedKalmanFilter:
 
         # Update roll, pitch, and yaw angles
         old_rotation = Rotation.from_euler('xyz', [roll, pitch, yaw], degrees=False)
-        updated_rotation = old_rotation * Rotation.from_euler('xyz', u[3:], degrees=False)
+        updated_rotation = old_rotation * Rotation.from_euler('xyz', u[3:]*dt, degrees=False)
         roll, pitch, yaw = updated_rotation.as_euler('xyz')
 
         # Rotate acceleration to the global frame
