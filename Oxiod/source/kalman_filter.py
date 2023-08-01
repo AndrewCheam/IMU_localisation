@@ -72,7 +72,8 @@ class ExtendedKalmanFilter:
         self.x[5:7] = np.array([velocity_x, velocity_y])
 
 
-        G = np.eye(7, 7)  # Jacobian of state transition function, anyhow initialised...
+        G = np.eye(7, 7)  # Jacobian of state transition function
+
 
         G[0,5] = dt
         G[1,6] = dt
